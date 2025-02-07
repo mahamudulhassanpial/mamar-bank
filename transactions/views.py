@@ -27,6 +27,14 @@ def send_transaction_email(user, amount, subject, template):
     send_email.attach_alternative(message, "text/html")
     send_email.send()
 
+
+def send_mail_to_user(subject, template_name, context, receiver):
+    mail_subject = subject
+    sender_mail_message = render_to_string(template_name, context)
+    mail = EmailMultiAlternatives(mail_subject, '', to=[receiver])
+    mail.attach_alternative(sender_mail_message, 'text/html')
+    mail.send()
+
 class TransactionCreateMixin(LoginRequiredMixin, CreateView):
     template_name = 'transactions/transaction_form.html'
     model = Transactions
@@ -75,7 +83,23 @@ class SendMoneyView(TransactionCreateMixin):
         sender_account.balance -= amount
         sender_account.save(update_fields=['balance'])
 
+        sender_email = self.request.user.email
+        receiver_email = receiver_account.user.email
+        
         messages.success(self.request, f"""{amount} has been sent to Account:  {account_no}""")
+        
+        send_mail_to_user("Transfer money", 'transactions/transaction_sender_mail.html', {
+            'amount': amount,
+            'account_no': account_no,
+            'owner': self.request.user
+        }, sender_email)
+
+        send_mail_to_user("Transfer money", 'transactions/transaction_receiver_email.html', {
+            'amount': amount,
+            'account_no': sender_account.account_no,
+            'owner': receiver_account.user
+        }, receiver_email)
+        
         return super().form_valid(form)
 
 
