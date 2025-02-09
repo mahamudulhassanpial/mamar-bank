@@ -12,8 +12,8 @@ from .models import UserBankAccount, UserAddress
 class UserPasswordChangeForm(PasswordChangeForm):
     class Meta:
         model = User
-        fields =  ['old_password', 'new_password1', 'new_password2']
-
+        fields =  "__all__"
+        # fields =  ['old_password', 'new_password1', 'new_password2']
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
