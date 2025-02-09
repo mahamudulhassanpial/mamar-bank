@@ -10,8 +10,18 @@
 </div>
 {% endfor %} {% endif %}
 <div class="bg-white px-3 py-4 rounded-xl my-6">
-
-    <h4 class="font-bold text-3xl text-left pb-5">Account NO: {{request.user.account.account_no}}</h4>
+    <div class="flex justify-center flex-col">
+        <h4 class="font-bold text-3xl text-left pb-5">Account NO: {{ request.user.account.account_no }}</h4>
+        <div>
+            <form>
+                <a href="{% url 'change_password' %}">
+                    <button type="button" class="text-white bg-gray-800 hover:bg-gray-900 focus:outline-none focus:ring-4 focus:ring-gray-300 font-medium rounded-full text-sm px-5 py-2.5 me-2 mb-2 dark:bg-gray-800 dark:hover:bg-gray-700 dark:focus:ring-gray-700 dark:border-gray-700">
+                                Change password
+                    </button>
+                </a>
+            </form>
+        </div>
+    </div>
     <h1 class="font-bold text-3xl text-center pb-5">Update Profile Information</h1>
     <div class="w-full mt-10">
         <form method="post" class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
